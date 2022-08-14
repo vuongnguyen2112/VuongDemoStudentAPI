@@ -59,7 +59,6 @@ namespace VuongDemoAPI.Controllers
     }
 
     // PUT: api/Classes/1
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutClass(int id, string className)
     {
@@ -90,7 +89,6 @@ namespace VuongDemoAPI.Controllers
     }
 
     // POST: api/Classes
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<Class>> PostClass(Class @class)
     {
