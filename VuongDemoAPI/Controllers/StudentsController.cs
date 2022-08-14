@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VuongDemoAPI.Models;
+using VuongDemoAPI.Services.StudentService;
+using VuongDemoAPI.DTO;
 
 namespace VuongDemoAPI.Controllers
 {
@@ -8,71 +10,53 @@ namespace VuongDemoAPI.Controllers
   [ApiController]
   public class StudentsController : ControllerBase
   {
-    private static List<Student> students = new List<Student>
-      {
-        new Student {Id = 2, Name = "Giang", ClassID = 2, Grade = 8}
-      };
-    private readonly DataContext _context;
+    private readonly IStudentService _studentService;
 
-    public StudentsController(DataContext context)
+    public StudentsController(IStudentService studentService)
     {
-      _context = context;
+      _studentService = studentService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Student>>> GetStudents()
+    public async Task<ActionResult<Response<List<GetStudentDTO>>>> GetStudents()
     {
-      return Ok(await _context.Students.ToListAsync());
+      return Ok(await _studentService.GetStudents());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Student>> GetStudent(int id)
+    public async Task<ActionResult<Response<GetStudentDTO>>> GetStudent(int id)
     {
-      var student = await _context.Students.FindAsync(id);
-      if (student == null)
-      {
-        return NotFound("Student Not Found");
-      }
-      return Ok(student);
+      return Ok(await _studentService.GetStudent(id));
     }
 
     [HttpPost]
-    public async Task<ActionResult<List<Student>>> PostStudent(Student student)
+    public async Task<ActionResult<Response<List<GetStudentDTO>>>> PostStudent(AddStudentDTO student)
     {
-      _context.Students.Add(student);
-      await _context.SaveChangesAsync();
-      var newStudent = await _context.Students.FindAsync(student.Id);
-      return Ok(newStudent);
+      var response = await _studentService.PostStudent(student);
+      return Ok(response);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<List<Student>>> PutStudent(Student request)
+    public async Task<ActionResult<List<Student>>> PutStudent(UpdateStudentDTO student)
     {
-      var dBStudent = await _context.Students.FindAsync(request.Id);
-
-      if (dBStudent == null)
+      var response = await _studentService.PutStudent(student);
+      if (response.Data == null)
       {
-        return NotFound("Student Not Found");
+        return NotFound(response);
       }
-      dBStudent.Name = request.Name;
-      dBStudent.ClassID = request.ClassID;
-      dBStudent.Grade = request.Grade;
-
-      await _context.SaveChangesAsync();
-      return Ok(dBStudent);
+      return Ok(response);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<List<Student>>> DeleteStudent(int id)
     {
-      var dBStudent = await _context.Students.FindAsync(id);
-      if (dBStudent == null)
+      var response = await _studentService.DeleteStudent(id);
+      if (response.Data == null)
       {
-        return NotFound("Student Not Found");
+        return NotFound(response);
       }
-      _context.Students.Remove(dBStudent);
-      _context.SaveChanges();
-      return Ok(await _context.Students.ToListAsync());
+      return Ok(response);
     }
   }
 }
+

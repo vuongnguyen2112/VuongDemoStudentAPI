@@ -1,5 +1,7 @@
 global using VuongDemoAPI.Data;
 global using Microsoft.EntityFrameworkCore;
+using VuongDemoAPI.Controllers;
+using VuongDemoAPI.Services.StudentService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,12 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//AutoMapper:
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+//Dependency Injection
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 
