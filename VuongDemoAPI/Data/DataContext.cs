@@ -9,6 +9,7 @@ namespace VuongDemoAPI.Data
 
     public DbSet<Student> Students { get; set; }
     public DbSet<Class> Classes { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
