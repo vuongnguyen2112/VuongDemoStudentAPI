@@ -1,5 +1,4 @@
 ﻿using VuongDemoAPI.DTO;
-using VuongDemoAPI.Models;
 
 namespace VuongDemoAPI.Services.StudentService
 {
